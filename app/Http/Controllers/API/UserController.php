@@ -8,6 +8,7 @@ use App\User;
 use App\Http\Resources\UserCollection;
 use DB;
 use File;
+use Spatie\Permission\Models\Permission;
 
 class UserController extends Controller
 {
@@ -108,5 +109,24 @@ class UserController extends Controller
     	File::delete(storage_path('app/public/couriers/'.$user->photo));
     	$user->delete();
     	return response()->json(['status' => 'success']);
+    }
+
+    public function userLists()
+    {
+    	$user = User::where('role','!=',3)->get();
+    	return new UserCollection($user);
+    }
+
+    public function getUserLogin()
+    {
+    	$user = request()->user();
+    	$permissions = [];
+    	foreach (Permission::all() as $permission) {
+    		if(request()->user()->can($permission->name)){
+    			$permissions[] = $permission->name;
+    		}
+    	}
+    	$user['permission'] = $permissions;
+    	return response()->json(['status' => 'success', 'data' => $user]);
     }
 }
