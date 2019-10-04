@@ -48,6 +48,28 @@
             <input type="number" class="form-control" v-model="product.price">
             <p class="text-danger" v-if="errors.price">{{ errors.price[0] }}</p>
         </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group" :class="{ 'has-error': errors.service }">
+                    <label for="">Lama Pengerjaan</label>
+                    <input type="number" class="form-control" v-model="product.service">
+                    <p class="text-danger" v-if="errors.service">{{ errors.service[0] }}</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group" :class="{ 'has-error': errors.service_type }">
+                    <label for="">Satuan</label>
+                    <select class="form-control" v-model="product.service_type">
+                        <option value="">Pilih</option>
+                        <option value="Hari">Hari</option>
+                        <option value="Jam">Jam</option>
+                    </select>
+                    <p class="text-danger" v-if="errors.service_type">{{ errors.service_type[0] }}</p>
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 <script type="text/javascript">
@@ -60,7 +82,9 @@
                     name: '',
                     unit_type: '',
                     laundry_type: '',
-                    price: ''
+                    price: '',
+                    service: '',
+                    service_type: ''
                 },
                 laundry_type: '',
                 showForm: false
@@ -74,7 +98,9 @@
                         name: res.data.name,
                         unit_type: res.data.unit_type,
                         laundry_type: res.data.laundry_type,
-                        price: res.data.price
+                        price: res.data.price,
+                        service: res.data.service,
+                        service_type: res.data.service_type
                     }
                 })
             }
@@ -104,6 +130,7 @@
                             price: '',
                             laundry_type: ''
                         }
+                        this.clearForm()
                         this.$router.push({ name: 'products.data' })
                     })
                 } else if (this.$route.name == 'products.edit') {
@@ -114,8 +141,19 @@
                             price: '',
                             laundry_type: ''
                         }
+                        this.clearForm()
                         this.$router.push({ name: 'products.data' })
                     })
+                }
+            },
+            clearForm(){
+                this.product = {
+                    name: '',
+                    unit_type: '',
+                    price: '',
+                    laundry_type: '',
+                    service: '',
+                    service_type: ''
                 }
             }
         }
